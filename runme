@@ -8,7 +8,6 @@ jobrun ./runme -r -- -o output/run -p ctl.nyears=5000
 import subprocess as subp 
 import sys, os, socket, argparse, shutil, glob, datetime, json
 #from distutils.dir_util import copy_tree # Deprecated from v3.12
-from pandas import DataFrame
 
 # Check whether runner library is installed or not:
 try:
