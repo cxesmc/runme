@@ -5,6 +5,6 @@
     "jobname"       : "ClimberX",
     "omp"           : 16,
 
-    "queues_file"   : ".runme/runme_queues.json",
-    "info_file"     : ".runme/runme_info.json"
+    "queues_file"   : ".runme/queues.json",
+    "info_file"     : ".runme/info.json"
 }

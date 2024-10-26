@@ -38,9 +38,7 @@ def main():
     '''Main subroutine to run one simulation.'''
 
     # Define configuration filenames
-    config_file = os.path.basename(__file__) + "_config"
-    info_file   = "config/" + os.path.basename(__file__) + "_info.json"
-    queues_file = "config/" + os.path.basename(__file__) + "_queues.json"
+    config_file = "." + os.path.basename(__file__) + "_config"
     
     # Load config file, specifically check if its available in the main directory
     if os.path.isfile(config_file):
@@ -51,17 +49,17 @@ def main():
         # and then load it. 
         error_msg = ("Required json file containing hpc job defaults not found: {} \n".format(config_file) +
                      "This is probably the first time you are running this script. \n" +
-                     "Copy the default file from the config directory using the following command, \n" +
-                     "check the settings and then try again: \n\n cp config/{} ./ \n".format(config_file))
+                     "Copy the default file from the .runme config directory using the following command, \n" +
+                     "check the settings and then try again: \n\n cp .runme/runme_config {} \n".format(config_file,config_file))
 
         raise Exception(error_msg)
 
     # Load all queue information and extract the relevant one for the current hpc
-    queues_all = json.load(open(queues_file))
+    queues_all = json.load(open(hpc_config["queues_file"]))
     hpc_queues = queues_all[hpc_config["hpc"]]
 
     # Load configuration info for the current setup (relevant paths, links, program aliases, etc)
-    info = json.load(open(info_file))
+    info = json.load(open(hpc_config["info_file"]))
     
 
     # Make exe_aliases string for printing help
@@ -156,7 +154,10 @@ def main():
     copy_exec = True 
 
     # If argument 'submit' is true, then ensure 'run' is also true
-    if submit: run = True 
+    #if submit: run = True 
+    # ajr: disabled this, so that one has to explicitly also choose to run. 
+    # that way, all directories could be generated included job.submit scripts,
+    # and then jobs could be run another way.
 
     if submit:
         # Make sure queue choices make sense
@@ -330,17 +331,21 @@ def main():
     # Generate the appropriate executable command to run program
     executable = "{}{}/{} {}".format(profiler_prefix,exe_rundir,exe_fname,exe_args)
     
-    # Run the job if desired 
-    if run:
+    if submit:
 
-        if submit:
+        # Write the job.submit script to rundir
+        preparejob(path_jobscript_template,rundir,executable,qos,
+                            wall,partition,account,email,omp,jobname)
+        
+        if run:
             # Submit job to queue 
-            pid = submitjob(path_jobscript_template,rundir,executable,qos,
-                            wall,partition,account,email,omp,jobname) 
-
-        else:
+            pid = submitjob(rundir) 
+    
+    else:
+        
+        if run:
             # Run job in background 
-            pid = runjob(rundir,executable,omp)
+            pid = runjob(rundir,executable,omp) 
 
     return 
 
@@ -372,13 +377,8 @@ def runjob(rundir,cmd,omp):
     
     return jobstatus
 
-def submitjob(path_template,rundir,cmd,qos,wall,partition,account,email,omp,jobname):
-    '''Submit a job to a HPC queue (sbatch,qsub) with a template job script'''
-
-    # Get info about current system
-    username  = os.environ.get('USER')
-    #hostname  = os.environ.get('HOSTNAME')
-    hostname  = socket.getfqdn()             # Returns full domain name
+def preparejob(path_template,rundir,cmd,qos,wall,partition,account,email,omp,jobname):
+    '''Prepare and write job script for submitting a job to a HPC queue'''
 
     # Create the jobscript using current info
     nm_jobscript   = 'job.submit'
@@ -387,6 +387,11 @@ def submitjob(path_template,rundir,cmd,qos,wall,partition,account,email,omp,jobn
     # Generate a job submission script, write to path
     script  = generate_jobscript(path_template,cmd,jobname,account,email,qos,wall,partition,omp)
     jobfile = open(path_jobscript,'w').write(script)
+
+    return
+
+def submitjob(rundir):
+    '''Submit a job to a HPC queue (sbatch,qsub) with a template job script'''
 
     # Prepare job command
     cmd_job = "cd {} && sbatch {}".format(rundir,nm_jobscript)
