@@ -25,7 +25,7 @@ pip install https://github.com/alex-robinson/runner/archive/refs/heads/master.zi
 pip install tabulate
 ```
 
-#### Using `jobrun` with `runcx`
+#### Using `jobrun` with `runme`
 
 `jobrun` is a command that is part of the Python `runner` library, found here:
 [https://github.com/alex-robinson/runner](https://github.com/alex-robinson/runner). This command facilitates running ensembles of simulations, or simulations with modified parameters via a convenient command-line interface. See the above `runner` page for its installation instructions.
