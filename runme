@@ -394,6 +394,7 @@ def submitjob(rundir):
     '''Submit a job to a HPC queue (sbatch,qsub) with a template job script'''
 
     # Prepare job command
+    nm_jobscript = 'job.submit'
     cmd_job = "cd {} && sbatch {}".format(rundir,nm_jobscript)
 
     # Run the command (ie, change to output directory and submit job)
