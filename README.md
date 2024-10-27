@@ -1,12 +1,12 @@
 # runme
 
 `runme` is a general script to perform all preiminary steps needed to run a program, and then to run it.
-In fact, it is almost too simple. But we have found it useful in many contexts so it seemed worth it.
+In fact, it is almost too simple. But we have found it useful in many contexts so it seemed worth it to make it available and general to facilitate any further development.
 `runme` is written in Python and makes use of a couple of JSON configuration files to make it extensible.
 
 ## Basic uses
 
-Once an executable has been created, you can run the model. This can be achieved via the included Python job submission script runylmo. The following steps are carried out via the script:
+Once an executable has been created, you can prepare an experiment and run it using the included Python job submission script `runme`. The following steps are carried out via the script:
 
 1. The run directory directory is created.
 2. The executable is copied to the run directory.
