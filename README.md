@@ -4,6 +4,29 @@
 In fact, it is almost too simple. But we have found it useful in many contexts so it seemed worth it to make it available and general to facilitate any further development.
 `runme` is written in Python and makes use of a couple of JSON configuration files to make it extensible.
 
+## How to get started
+
+First copy the `runme` script and the `.runme` configuration directory to your model directory, where you would like to launch simulations from:
+
+```
+cp runme $MODEL_PATH/
+cp -r .runme $MODEL_PATH/
+```
+
+Next modify the choices in the file `$MODEL_PATH/.runme/my_model_info.json`, which describe names of executables, folders to be copied/linked to run directories, parameter files to be copied, etc.
+
+Finally, copy the user configuration file to the main directory and enter the name of the HPC you are using, your email address etc.:
+
+```
+cd $MODEL_PATH
+cp .runme/runme_config .runme_config
+```
+
+That's it! `runme` should now be ready for use with your model. Note:
+
+- If you will use a new HPC that is not listed in `.runme/queues.json`, then please add it to the file together with relevant settings for the different job queues available. Please add it as an issue here, so that the repository can be continuously updated with new HPC information.
+- You can make your own job submission templates in `.runme/` (see `submit_slurm` and `submit_slurm_omp`) if something specific is needed for your HPC and/or model. To use a custom job submission templates, make sure to point to them in the `.runme/queues.json` options.
+ 
 ## Basic uses
 
 Once an executable has been created, you can prepare an experiment and run it using the included Python job submission script `runme`. The following steps are carried out via the script:
