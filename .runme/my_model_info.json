@@ -24,29 +24,18 @@
         },
 
     "par_paths" :
-        {   "ctl"  : "nml/control.nml",
-            "atm"  : "nml/atm_par.nml",
-            "lnd"  : "nml/lnd_par.nml",
-            "sic"  : "nml/sic_par.nml",
-            "bgc"  : "nml/bgc_par.nml",
-            "geo"  : "nml/geo_par.nml",
-            "imo"  : "nml/imo_par.nml",
-            "ocn"  : "nml/ocn_par.nml",
-            "smb"  : "nml/smb_par.nml",
-            "icey" : "nml/ice_yelmo_par.nml",
-            "ices" : "nml/ice_sico_par.nml",
-            "hyst" : "nml/hyster_ctrl.nml"
+        {   "alias"  : "None"
         },
 
     "files" : 
-        ["nml/ice_grids.nml"], 
+        ["None"], 
 
     "dir-special" :
     {
-        "restart/vilma" : "vilma_restart"
+        "None" : "target_dir_name"
     },
 
     "links" : 
-        ["input", "maps", "restart", "ice_data"]
+        ["None"]
 
 }
